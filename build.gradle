@@ -1,0 +1,75 @@
+plugins {
+  id "java-library"
+  id "idea"
+  id "pl.allegro.tech.build.axion-release" version "1.10.2"
+  id "com.gorylenko.gradle-git-properties" version "2.2.0"
+}
+
+group 'com.zzizily'
+description = "template java library"
+version = scmVersion.version
+
+sourceCompatibility = compatibilityVersion
+targetCompatibility = compatibilityVersion
+
+//[compileJava, compileTestJava]*.options*.encoding = encoding
+
+configurations {
+  developmentOnly
+  runtimeClasspath {
+    extendsFrom developmentOnly
+  }
+  compileOnly {
+    extendsFrom annotationProcessor
+  }
+}
+
+wrapper {
+  gradleVersion = gradleVersion
+  distributionType = Wrapper.DistributionType.BIN
+}
+
+repositories {
+  mavenCentral()
+  jcenter()
+//  maven { url 'https://jitpack.io' }
+}
+
+gitProperties {
+  dateFormat = "yyyy-MM-dd HH:mm:ss"
+  dateFormatTimeZone = "Asia/Seoul"
+}
+
+jar {
+  enabled = true
+  manifest {
+    attributes(
+      "Implementation-Title": "${project.name}",
+      "Implementation-Version": "${project.version}"
+    )
+  }
+}
+
+test {
+  useJUnitPlatform()
+  //개발 시에는 test OFF source 로 직접 호출은 가능 gradle build 시에만 무시
+  enabled = false
+}
+
+dependencies {
+
+  compileOnly             "org.projectlombok:lombok:${lombok}"
+  annotationProcessor     "org.projectlombok:lombok:${lombok}"
+  implementation          "com.google.guava:guava:${guava}"
+  implementation          "org.apache.commons:commons-lang3:${commonsLang3}"
+  implementation          "org.apache.commons:commons-math3:${commonsMath3}"
+
+  testImplementation      "org.junit.jupiter:junit-jupiter-api:${dependencyJunitJupiter}"
+  testImplementation      "org.junit.jupiter:junit-jupiter-engine:${dependencyJunitJupiter}"
+  testImplementation      "org.junit.jupiter:junit-jupiter-params:${dependencyJunitJupiter}"
+  testImplementation      "org.junit.vintage:junit-vintage-engine:${dependencyJunitJupiter}"
+  testImplementation      "org.junit.platform:junit-platform-engine:${dependencyJunitPlatform}"
+  testImplementation      "org.junit.platform:junit-platform-commons:${dependencyJunitPlatform}"
+  testCompileOnly         "org.projectlombok:lombok:${lombok}"
+  testAnnotationProcessor "org.projectlombok:lombok:${lombok}"
+}
