@@ -1,4 +1,4 @@
-# template-java-library
+# template-spring-library
 
 ## gradle plugin
 

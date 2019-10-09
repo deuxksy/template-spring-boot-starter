@@ -1,13 +1,13 @@
-package com.zzizily.common;
+package com.zzizily.skeleton.core.common;
 
-import lombok.Builder;
 import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
-@Log
+@Slf4j
 public class GradleProperties {
 
   private static Properties properties = new Properties();
@@ -16,13 +16,12 @@ public class GradleProperties {
     try {
       properties.load(new FileInputStream("gradle.properties"));
     } catch (IOException e) {
-      log.severe(e.getMessage());
+      log.error("{}", e.getMessage());
     }
   }
 
   public static String getProperty(String key) {
     return properties.getProperty(key);
   }
-
 
 }

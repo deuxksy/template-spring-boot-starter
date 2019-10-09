@@ -1,0 +1,21 @@
+debug: true
+
+spring:
+  application:
+    name: template-spring-library-local
+
+logging:
+  path: ./log
+  pattern:
+    console: ${CONSOLE_LOG_PATTERN:%clr(%d{${LOG_DATEFORMAT_PATTERN:yyyy-MM-dd HH:mm:ss.SSS}}){faint} %clr(${LOG_LEVEL_PATTERN:%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m (%file:%line\) %n${LOG_EXCEPTION_CONVERSION_WORD:%wEx}}
+  level:
+    ROOT: info
+    com.zzizily: debug
+    org.springframework.boot: info
+    org.springframework.boot.autoconfigure.logging.ConditionEvaluationReportLoggingListener: debug
+    org.springframework.boot.web.servlet.ServletContextInitializerBeans: info
+#    org.springframework.boot.devtools: debug
+#    org.springframework.web.filter: debug
+    org.springframework.web: info
+#    org.hibernate.SQL: debug
+#    org.hibernate.type.descriptor.sql: trace

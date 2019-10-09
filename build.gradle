@@ -1,8 +1,10 @@
 plugins {
   id "java-library"
   id "idea"
-  id "pl.allegro.tech.build.axion-release" version "1.10.2"
-  id "com.gorylenko.gradle-git-properties" version "2.2.0"
+  id "pl.allegro.tech.build.axion-release"  version "1.10.2"
+  id "com.gorylenko.gradle-git-properties"  version "2.2.0"
+  id "org.springframework.boot"             version "2.1.9.RELEASE"
+  id "io.spring.dependency-management"      version "1.0.8.RELEASE"
 }
 
 group 'com.zzizily'
@@ -11,8 +13,7 @@ version = scmVersion.version
 
 sourceCompatibility = compatibilityVersion
 targetCompatibility = compatibilityVersion
-
-//[compileJava, compileTestJava]*.options*.encoding = encoding
+[compileJava, compileTestJava]*.options*.encoding = encoding
 
 configurations {
   developmentOnly
@@ -29,20 +30,29 @@ wrapper {
   distributionType = Wrapper.DistributionType.BIN
 }
 
+gitProperties {
+  dateFormat = "yyyy-MM-dd HH:mm:ss"
+  dateFormatTimeZone = "Asia/Seoul"
+}
+
+bootJar {
+  enabled = false
+}
+
+jar {
+  enabled = true
+}
+
+
 repositories {
   mavenCentral()
   jcenter()
 //  maven { url 'https://jitpack.io' }
 }
 
-gitProperties {
-  dateFormat = "yyyy-MM-dd HH:mm:ss"
-  dateFormatTimeZone = "Asia/Seoul"
-}
-
 jar {
   enabled = true
-  manifest {
+  manifest {dependencyJunitJupiter
     attributes(
       "Implementation-Title": "${project.name}",
       "Implementation-Version": "${project.version}"
@@ -57,19 +67,29 @@ test {
 }
 
 dependencies {
-
-  compileOnly             "org.projectlombok:lombok:${lombok}"
-  annotationProcessor     "org.projectlombok:lombok:${lombok}"
+  implementation         ("org.springframework.boot:spring-boot-starter-web") {
+//    exclude module:       "spring-boot-starter-logging"
+  }
+  annotationProcessor     "org.springframework.boot:spring-boot-configuration-processor"
+//  implementation          "org.springframework.boot:spring-boot-starter-log4j2"
+  developmentOnly         "org.springframework.boot:spring-boot-devtools"
+  compileOnly             "org.projectlombok:lombok"
+  annotationProcessor     "org.projectlombok:lombok"
   implementation          "com.google.guava:guava:${guava}"
   implementation          "org.apache.commons:commons-lang3:${commonsLang3}"
   implementation          "org.apache.commons:commons-math3:${commonsMath3}"
 
+  // test
+  // test junit 4 안씀 5 사용
+  testImplementation     ("org.springframework.boot:spring-boot-starter-test") {
+    exclude module:       "junit"
+  }
+  testImplementation      "org.springframework.restdocs:spring-restdocs-mockmvc"
   testImplementation      "org.junit.jupiter:junit-jupiter-api:${dependencyJunitJupiter}"
-  testImplementation      "org.junit.jupiter:junit-jupiter-engine:${dependencyJunitJupiter}"
-  testImplementation      "org.junit.jupiter:junit-jupiter-params:${dependencyJunitJupiter}"
   testImplementation      "org.junit.vintage:junit-vintage-engine:${dependencyJunitJupiter}"
+  testImplementation      "org.junit.jupiter:junit-jupiter-params:${dependencyJunitJupiter}"
   testImplementation      "org.junit.platform:junit-platform-engine:${dependencyJunitPlatform}"
   testImplementation      "org.junit.platform:junit-platform-commons:${dependencyJunitPlatform}"
-  testCompileOnly         "org.projectlombok:lombok:${lombok}"
-  testAnnotationProcessor "org.projectlombok:lombok:${lombok}"
+  testCompileOnly         "org.projectlombok:lombok"
+  testAnnotationProcessor "org.projectlombok:lombok"
 }

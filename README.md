@@ -1,1 +1,1 @@
-# template-java-library
+# template-spring-library
